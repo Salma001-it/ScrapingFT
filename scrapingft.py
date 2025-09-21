@@ -92,16 +92,26 @@ from huggingface_hub import login
 
 login(token=os.environ["HF_TOKEN"])
 
+from datasets import load_dataset, Dataset
+import pandas as pd
 
-from datasets import Dataset
+repo_id = "SelmaNajih001/FT_Microsoft"
 
-# 3. Trasforma in dataset Hugging Face
-dataset = Dataset.from_pandas(df)
 
-dataset
+try:
+    old = load_dataset(repo_id, split="train")
+    old_df = old.to_pandas()
+except:
+    old_df = pd.DataFrame()
 
-# 5. Carica il dataset sul tuo repository Hugging Face
-repo_id = "SelmaNajih001/FT_Microsoft"  # sostituisci con il tuo username/repo
-dataset.push_to_hub(repo_id, private=False)  # private=True se vuoi mantenerlo privato
+# Unisci vecchi + nuovi (evita duplicati su Titolo+Data)
+all_df = pd.concat([old_df, df]).drop_duplicates(subset=["Titolo", "Data"], keep="last")
 
-print("Dataset pubblicato con successo!")
+# ✅ ulteriore check finale
+all_df = all_df.drop_duplicates(subset=["Titolo", "Data"], keep="last").reset_index(drop=True)
+
+# Crea nuovo dataset
+final_ds = Dataset.from_pandas(all_df)
+
+# Pubblica aggiornato
+final_ds.push_to_hub(repo_id, private=False)
