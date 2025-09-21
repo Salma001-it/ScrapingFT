@@ -87,11 +87,11 @@ driver.quit()
 df = pd.DataFrame(dataset)
 print(df)
 
-df
-
+import os
 from huggingface_hub import login
 
-login(token="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")
+login(token=os.environ["HF_TOKEN"])
+
 
 from datasets import Dataset
 
