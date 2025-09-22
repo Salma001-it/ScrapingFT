@@ -24,7 +24,7 @@ jobs:
       # 3. Installa le dipendenze
       - name: Install dependencies
         run: |
-          pip install selenium pandas datasets huggingface_hub
+          pip install selenium pandas datasets huggingface_hub openpyxl
 
       # 4. Lancia il tuo script
       - name: Run scraper
