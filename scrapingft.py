@@ -35,7 +35,7 @@ for company in companies:
     link = f"https://www.ft.com/search?q={company}"
     driver = webdriver.Chrome(options=options)
 
-    for i in range(2, 15):  # Pagine da navigare
+    for i in range(2, 3):  # Pagine da navigare
         driver.get(link)
         wait = WebDriverWait(driver, 10)
 
