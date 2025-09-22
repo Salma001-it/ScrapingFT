@@ -5,15 +5,17 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from datetime import datetime
-import pandas as pd
 import os
 from huggingface_hub import login
 from datasets import load_dataset, Dataset
 import time
+import pandas as pd
+df_tickers=pd.read_excel("/content/SP500CompanyNameTicker.xlsx")
+companies=df_tickers["Company"].to_list()
 
 # Lista aziende da scrapare
-companies = ["Microsoft", "Apple", "Google", "Amazon", "Facebook",
-             "Tesla", "IBM", "Intel", "Netflix", "Adobe"]
+#companies = ["Microsoft", "Apple", "Google", "Amazon", "Facebook",
+#             "Tesla", "IBM", "Intel", "Netflix", "Adobe"]
 
 # Configurazione Selenium headless
 options = Options()
@@ -23,15 +25,16 @@ options.add_argument("--disable-dev-shm-usage")
 
 dataset = []
 
-# Login Hugging Face
-login(token=os.environ["HF_TOKEN"])
+from huggingface_hub import login
+
+login(token="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")
 
 for company in companies:
     print(f"Scraping {company}...")
     link = f"https://www.ft.com/search?q={company}"
     driver = webdriver.Chrome(options=options)
 
-    for i in range(2, 5):  # Pagine da navigare
+    for i in range(2, 15):  # Pagine da navigare
         driver.get(link)
         wait = WebDriverWait(driver, 10)
 
@@ -106,4 +109,3 @@ final_ds = Dataset.from_pandas(all_df)
 final_ds.push_to_hub(repo_id, private=False)
 
 print("Dataset aggiornato con successo!")
-
