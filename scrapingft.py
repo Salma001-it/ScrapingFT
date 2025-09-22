@@ -89,7 +89,7 @@ for company in companies:
 
 # Salva in DataFrame pandas
 df = pd.DataFrame(dataset)
-print(df)
+df["Company"]=df["Company"].str.replace("+"," ")
 
 # Repo Hugging Face
 repo_id = "SelmaNajih001/FT_MultiCompany"
