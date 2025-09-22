@@ -10,6 +10,7 @@ from huggingface_hub import login
 from datasets import load_dataset, Dataset
 import time
 import pandas as pd
+import openpyxl
 df_tickers=pd.read_excel("SP500CompanyNameTicker.xlsx")
 companies=df_tickers["Company"].to_list()
 
