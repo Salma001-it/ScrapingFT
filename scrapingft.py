@@ -12,6 +12,7 @@ import time
 import pandas as pd
 import openpyxl
 df_tickers=pd.read_excel("SP500CompanyNameTicker.xlsx")
+df_tickers=df_tickers[:50]
 companies=df_tickers["Company"].to_list()
 
 # Lista aziende da scrapare
