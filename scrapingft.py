@@ -103,7 +103,7 @@ except:
     old_df = pd.DataFrame()
 
 # Unisci vecchi + nuovi e rimuovi duplicati
-all_df = pd.concat([old_df, df]).drop_duplicates(subset=["Company", "Title", "Date"], keep="last")
+all_df = pd.concat([old_df, df]).drop_duplicates(subset=["Company", "Title", "Date"])
 all_df = all_df.reset_index(drop=True)
 
 # Crea dataset Hugging Face e pubblica
