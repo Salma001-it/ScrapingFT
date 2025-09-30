@@ -12,7 +12,7 @@ import time
 import pandas as pd
 import openpyxl
 df_tickers=pd.read_excel("SP500CompanyNameTicker.xlsx")
-#df_tickers=df_tickers[:50]
+df_tickers=df_tickers[50:]
 companies=df_tickers["Company"].to_list()
 
 # Lista aziende da scrapare
@@ -36,7 +36,7 @@ for company in companies:
     link = f"https://www.ft.com/search?q={company}"
     driver = webdriver.Chrome(options=options)
 
-    for i in range(2, 3):  # Pagine da navigare
+    for i in range(1, 50):  # Pagine da navigare
         driver.get(link)
         wait = WebDriverWait(driver, 10)
 
