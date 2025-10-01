@@ -28,8 +28,9 @@ options.add_argument("--disable-dev-shm-usage")
 dataset = []
 
 from huggingface_hub import login
+import os
+login(token=os.environ["HF_TOKEN"])
 
-login(token="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")
 
 for company in companies:
     print(f"Scraping {company}...")
