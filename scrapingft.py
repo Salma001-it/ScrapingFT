@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -14,12 +13,6 @@ import openpyxl
 df_tickers=pd.read_excel("SP500CompanyNameTicker.xlsx")
 #df_tickers=df_tickers[50:150]
 companies=df_tickers["Company"].to_list()
-
-# Lista aziende da scrapare
-#companies = ["Microsoft", "Apple", "Google", "Amazon", "Facebook",
-#             "Tesla", "IBM", "Intel", "Netflix", "Adobe"]
-
-# Configurazione Selenium headless
 options = Options()
 options.add_argument("--headless")
 options.add_argument("--no-sandbox")
@@ -31,7 +24,6 @@ from huggingface_hub import login
 import os
 login(token=os.environ["HF_TOKEN"])
 
-
 for company in companies:
     print(f"Scraping {company}...")
     link = f"https://www.ft.com/search?q={company}"
@@ -41,7 +33,6 @@ for company in companies:
         driver.get(link)
         wait = WebDriverWait(driver, 10)
 
-        # Gestione banner cookie
         try:
             iframe = wait.until(EC.presence_of_element_located((By.ID, "sp_message_iframe_1349677")))
             driver.switch_to.frame(iframe)
@@ -87,28 +78,25 @@ for company in companies:
                 print(f"Errore elemento {index}: {e_inner}")
 
     driver.quit()
-    time.sleep(2)  # piccola pausa tra aziende
+    time.sleep(2)  # pausa tra aziende
 
-# Salva in DataFrame pandas
+
 df = pd.DataFrame(dataset)
 df["Company"]=df["Company"].str.replace("+"," ")
 
-# Repo Hugging Face
 repo_id = "SelmaNajih001/FT_MultiCompany"
 
-# Carica dataset esistente
 try:
     old = load_dataset(repo_id, split="train")
     old_df = old.to_pandas()
 except:
     old_df = pd.DataFrame()
 
-# Unisci vecchi + nuovi e rimuovi duplicati
 all_df = pd.concat([old_df, df]).drop_duplicates(subset=["Company", "Title", "Date"])
 all_df = all_df.reset_index(drop=True)
 
-# Crea dataset Hugging Face e pubblica
+
 final_ds = Dataset.from_pandas(all_df)
 final_ds.push_to_hub(repo_id, private=False)
 
-print("Dataset aggiornato con successo!")
+print("Dataset aggiornato")
