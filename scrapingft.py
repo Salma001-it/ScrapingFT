@@ -11,7 +11,7 @@ import time
 import pandas as pd
 import openpyxl
 df_tickers=pd.read_excel("SP500CompanyNameTicker.xlsx")
-#df_tickers=df_tickers[50:150]
+df_tickers=df_tickers[:150]
 companies=df_tickers["Company"].to_list()
 options = Options()
 options.add_argument("--headless")
@@ -29,7 +29,7 @@ for company in companies:
     link = f"https://www.ft.com/search?q={company}"
     driver = webdriver.Chrome(options=options)
 
-    for i in range(2, 3):  # Pagine da navigare
+    for i in range(2, 20):  # Pagine da navigare
         driver.get(link)
         wait = WebDriverWait(driver, 10)
 
